@@ -18,39 +18,6 @@ class Product{
     }
 };
 
-class ProductFilter{
-    public:
-    vector<Product*> byColor(vector<Product*> items, Color color){
-        vector<Product*> results;
-        for(auto& item : items){
-            if(item->color == color){ 
-                results.push_back(item);
-            }
-        }
-        return results;
-    }
-   // Make a different function for a different filter
-    vector<Product*> bySize(vector<Product*> items, Size size){
-        vector<Product*> results;
-        for(auto& item : items){
-            if(item->size == size){ 
-                results.push_back(item);
-            }
-        }
-        return results;
-    }
-
-    vector<Product*> bySizeAndColor(vector<Product*> items, Size size, Color color){
-        vector<Product*> results;
-        for(auto& item : items){
-            if(item->size == size && item->color == color){ 
-                results.push_back(item);
-            }
-        }
-        return results;
-    }
-    
-};
 template<typename T> 
 class Specification {
 public:
