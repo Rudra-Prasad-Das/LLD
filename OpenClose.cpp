@@ -40,9 +40,18 @@ int main(){
     ProductFilter pf;
 
     auto greenItems = pf.byColor(items, Color::green);
-
-    for(auto greenItem : greenItems){
-        cout << greenItem->name << " " << greenItem->size <<endl;
+    string itemSize;
+    for(auto greenItem : greenItems){  
+        if(greenItem->size == Size::large){
+            itemSize = "large";
+        } 
+        else if (greenItem->size == Size::medium){
+            itemSize = "medium";
+        }
+        else{
+            itemSize = "small";
+        }
+        cout << greenItem->name << " " << itemSize <<endl; //fix
         /**
          * @brief cout << greenItem->name << " " << greenItem->color <<endl; is an error
          * Reason : Color is an enum and cout does not know how to print greenItem->color
