@@ -3,34 +3,54 @@
 #include <string>
 using namespace std;
 
-class Journal{
+enum class Color {red, green , blue};
+enum class Size  {small, medium, large};
+
+class Product{
     public:
-    string title;
-    vector<string> entries;
-   
-    Journal(const string &title){
-        this->title = title;
+    string name;
+    Color color;
+    Size size;
+    Product(string name , Color color, Size size){
+        this->name = name;
+        this->color = color;
+        this->size = size;
     }
-
-    void add(const string& entry){
-        static int count = 0 ;
-        entries.push_back("Entry no" + to_string(count) + ":" + entry);
-        count++;
-    }
-
-    void display(){
-        for(auto entry : entries){
-            cout<<entry<<"\n";
-        }
-    }
-
 };
-int main(){
-    Journal obj("Add the name of the diary");
 
-    obj.add("Today is Sunday");
-    obj.add("Today is Monday");
-    obj.display();
+class ProductFilter{
+    public:
+    vector<Product*> byColor(vector<Product*> items, Color color){
+        vector<Product*> results;
+        for(auto& item : items){
+            if(item->color == color){ 
+                results.push_back(item);
+            }
+        }
+        return results;
+    }
+};
+
+int main(){
+    Product apple("Apple", Color::green, Size::small);
+    Product tree("Banyan", Color::green, Size::large);
+    Product house("House", Color::blue, Size::large);
+
+    vector<Product*> items {&apple, &tree, &house};
+    ProductFilter pf;
+
+    auto greenItems = pf.byColor(items, Color::green);
+
+    for(auto greenItem : greenItems){
+        cout << greenItem->name << " " << greenItem->size <<endl;
+        /**
+         * @brief cout << greenItem->name << " " << greenItem->color <<endl; is an error
+         * Reason : Color is an enum and cout does not know how to print greenItem->color
+         */
+    }
+
+
+
 
     return 0;
 }
