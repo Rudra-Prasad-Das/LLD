@@ -26,7 +26,7 @@ class Journal{
 
 };
 int main(){
-    Journal* obj = new Journal("Dear Diary");
+    Journal* obj = new Journal("Add the name of the diary");
 
     obj->add("Today is Sunday");
     obj->add("Today is Monday");
