@@ -51,6 +51,67 @@ class ProductFilter{
     }
     
 };
+template<typename T> 
+class Specification {
+public:
+    virtual bool isSatisfied(T* item) = 0;
+};
+
+template<typename T> 
+class Filter {
+public:
+    virtual vector<T*> filter(vector<T*> items, Specification<T>& spec) = 0;
+};
+
+class BetterFilter : public Filter<Product> {
+public:
+    vector<Product*> filter(vector<Product*> items, Specification<Product>& spec) override {
+        vector<Product*> result;
+        for (auto& item : items) {
+            if (spec.isSatisfied(item)) {
+                result.push_back(item);
+            }
+        }
+        return result;
+    }
+};
+class ColorSpecification : public Specification<Product>
+{
+    public:
+    Color color;
+    ColorSpecification(Color color) : color(color) {}
+
+    bool isSatisfied(Product* item){
+        return item->color == color;
+    }
+
+};
+
+class SizeSpecification : public Specification<Product>
+{
+    public:
+    Size size;
+    SizeSpecification(Size size) : size(size) {}
+
+    bool isSatisfied(Product* item){
+        return item->size == size;
+    }
+};
+
+template<typename T>
+class AndSpecification : public Specification<T>{
+    public:
+    Specification<T>& first;
+    Specification<T>& second;
+
+    AndSpecification(Specification<T> &first,Specification<T> &second) : first(first),second(second) {}
+
+    bool isSatisfied(T* item){
+        return first.isSatisfied(item) and second.isSatisfied(item);
+    }
+
+
+};
 
 int main(){
     Product apple("Apple", Color::green, Size::small);
@@ -58,35 +119,33 @@ int main(){
     Product house("House", Color::blue, Size::large);
 
     vector<Product*> items {&apple, &tree, &house};
-    ProductFilter pf;
+    
+    BetterFilter bf;
+    ColorSpecification green(Color::green);
+    /**
+        for(auto item : bf.filter(items, green)){
+            cout<<item->name<<endl;
+        }
+    */
+    
+    SizeSpecification small(Size::small);
 
-    auto greenItems = pf.byColor(items, Color::green);
-    string itemSize;
-    for(auto greenItem : greenItems){  
-        if(greenItem->size == Size::large){
-            itemSize = "large";
-        } 
-        else if (greenItem->size == Size::medium){
-            itemSize = "medium";
+    AndSpecification<Product> greenAndSmall(green,small);
+
+    for(auto item : bf.filter(items, greenAndSmall)){
+            cout<<item->name<<endl;
         }
-        else{
-            itemSize = "small";
-        }
-        cout << greenItem->name << " " << itemSize <<endl; //fix
+
         /**
          * @brief cout << greenItem->name << " " << greenItem->color <<endl; is an error
          * Reason : Color is an enum and cout does not know how to print greenItem->color
          */
-    }
-
-
-
-
+    
     return 0;
 }
 
 /**
- * @brief How to compile and run cpp code in terminal
+ * @brief Open Close Principle --> System should be open to extension and closed for modifications
  * g++ <filename>.cpp -o <filename>.exe
  * <filename>.exe
  */
