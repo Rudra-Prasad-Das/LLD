@@ -47,6 +47,17 @@ class Square : public Rectangle{
  * It states that any function is taking any object of the Base class then it should be replacable by the Derived class without any problem
  * @param r 
  */
+class RectangleFactory{
+    public:
+    static Rectangle createRectangle(int h, int w);
+    static Rectangle createSquare(int size);
+};
+Rectangle RectangleFactory::createRectangle(int height, int width){
+    return Rectangle(height,width);
+}
+Rectangle RectangleFactory::createSquare(int size){
+    return Square(size); 
+}
 void process(Rectangle &r){
     int w = r.getWidth();
     r.setHeight(10);
