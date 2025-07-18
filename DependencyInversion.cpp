@@ -21,27 +21,38 @@ class Person{
     public:
     string name;
 };
-class Relationship{  //low-level module
+
+// Add an abstraction to interact with the low level code
+class RelationshipBrowser{
+    public:
+    virtual vector<Person> findAllChildren(const string &name) = 0;
+};
+class Relationship:public RelationshipBrowser{  //low-level module
     vector<tuple<Person, Relation, Person>> relations;  //Change in logic of the low level code
     public:
     void addParentAndChild(const Person& parent, const Person& child){
         relations.push_back({parent,Relation::PARENT,child});
         relations.push_back({child,Relation::CHILD,parent});
     }
+    vector<Person> findAllChildren(const string& name){
+        vector<Person> child;
+        for(auto &tup : relations){
+           const Person& first = get<0>(tup);
+           Relation relation = get<1>(tup);
+           const Person& second = get<2>(tup); 
+           if(first.name == name && relation == Relation::PARENT){
+            child.push_back(second);
+           }
+        }
+        return child;
+    }
 };
-
 class Research{  // High level module
     public:
-    Research(Relationship& rel){  //Direct dependency on the low-level Module
-        auto& relations = rel.relations;   // High level code is broken due to change in logic of the low level code 
-        for(auto& tup : relations){
-            const Person& first = get<0>(tup);
-            Relation relation = get<1>(tup);
-            const Person& second = get<2>(tup);
-            if(first.name == "Mom" && relation == Relation::PARENT){
-                cout<<"Mom has a child called "<<second.name<<endl;
-            }
-        } 
+    Research(RelationshipBrowser& browser){
+        for (auto &child : browser.findAllChildren("Mom")){
+            cout<<"Mom has child with name "<<child.name<<endl;
+        }
     }
 };
 int main(){
@@ -52,6 +63,6 @@ int main(){
     Relationship rel;
     rel.addParentAndChild(mom,son);
     rel.addParentAndChild(mom,daughter);
-    Research _res(rel);
+    Research _res(rel);  // No change in the client code even when the low level code was changed
     return 0;
 }
