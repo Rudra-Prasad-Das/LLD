@@ -22,8 +22,8 @@ class Person{
     string name;
 };
 class Relationship{  //low-level module
+    vector<tuple<Person, Relation, Person>> relations;  //Change in logic of the low level code
     public:
-    vector<tuple<Person, Relation, Person>> relations;
     void addParentAndChild(const Person& parent, const Person& child){
         relations.push_back({parent,Relation::PARENT,child});
         relations.push_back({child,Relation::CHILD,parent});
@@ -33,7 +33,7 @@ class Relationship{  //low-level module
 class Research{  // High level module
     public:
     Research(Relationship& rel){  //Direct dependency on the low-level Module
-        auto& relations = rel.relations;
+        auto& relations = rel.relations;   // High level code is broken due to change in logic of the low level code 
         for(auto& tup : relations){
             const Person& first = get<0>(tup);
             Relation relation = get<1>(tup);
