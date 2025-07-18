@@ -21,12 +21,27 @@ class Person{
     public:
     string name;
 };
-class Relationship{
+class Relationship{  //low-level module
     public:
     vector<tuple<Person, Relation, Person>> relations;
     void addParentAndChild(const Person& parent, const Person& child){
         relations.push_back({parent,Relation::PARENT,child});
         relations.push_back({child,Relation::CHILD,parent});
+    }
+};
+
+class Research{  // High level module
+    public:
+    Research(Relationship& rel){  //Direct dependency on the low-level Module
+        auto& relations = rel.relations;
+        for(auto& tup : relations){
+            const Person& first = get<0>(tup);
+            Relation relation = get<1>(tup);
+            const Person& second = get<2>(tup);
+            if(first.name == "Mom" && relation == Relation::PARENT){
+                cout<<"Mom has a child called "<<second.name<<endl;
+            }
+        } 
     }
 };
 int main(){
@@ -37,5 +52,6 @@ int main(){
     Relationship rel;
     rel.addParentAndChild(mom,son);
     rel.addParentAndChild(mom,daughter);
+    Research _res(rel);
     return 0;
 }
