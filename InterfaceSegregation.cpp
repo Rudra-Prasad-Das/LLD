@@ -22,7 +22,7 @@ class MFP:public IMachine{
 
     }
 
-    void fac(Document& doc){
+    void fax(Document& doc){
 
     }
 };
@@ -37,8 +37,11 @@ class Scanner:public IMachine{
         // Only functionality required
     }
 
-    void fac(Document& doc){
+    void fax(Document& doc){
 
     }
 };
-
+int main(){
+    //client code
+    return 0;
+}
