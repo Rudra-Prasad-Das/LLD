@@ -8,13 +8,20 @@ class Document{
 
     }
 };
-class IMachine{
+//Segregation of Interfaces
+class IPrinter{
     virtual void print(Document& doc) = 0;
-    virtual void scan(Document& doc) = 0;
+};
+
+class IScanner{
+    virtual void print(Document& doc) = 0;
+};
+
+class IFax{
     virtual void fax(Document& doc) = 0;
 };
 
-class MFP:public IMachine{
+class MFP:public IPrinter, public IScanner, public IFax {
     void print(Document& doc){
 
     }
@@ -27,18 +34,9 @@ class MFP:public IMachine{
     }
 };
 
-class Scanner:public IMachine{
-    void print(Document& doc){
-        // throw some Exception 
-        // or let them be empty
-        // Sending the client wrong message is giving a wrong API
-    }
+class Scanner:public IScanner{
     void scan(Document& doc){
         // Only functionality required
-    }
-
-    void fax(Document& doc){
-
     }
 };
 int main(){
