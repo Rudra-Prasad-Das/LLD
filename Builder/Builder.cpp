@@ -18,7 +18,7 @@ class HTMLElement{
     string str(int indent = 0){
         ostringstream oss;
         string i(indent_size*indent, ' ');
-        oss<< i << name << ">" << endl;
+        oss << i << "<" << name << ">" << endl;
         if(text.size() > 0){
             oss<< string(indent_size*(indent+1),' ') <<text<<endl;
         }
@@ -27,23 +27,31 @@ class HTMLElement{
             oss << e.str(indent+1);
         }
 
-        oss << i << "/" << name << ">" << endl;
+        oss << i << "</" << name << ">" << endl;
         return oss.str();
 
     }
 
 };
 class HTMLBuilder{
+    public:
     HTMLElement root;
     HTMLBuilder(string root_name){
         root.name = root_name;
     }
-    void addChild(string child_name, string child){
-        
+    void addChild(string child_name, string child_text){
+        HTMLElement e(child_name,child_text);
+        root.elements.push_back(e);
+    }
+    string str() {
+        return root.str();
     }
 };
 int main(){
 
-
+    HTMLBuilder builder("ul");
+    builder.addChild("li", "hello");
+    builder.addChild("li","World");
+    cout<<builder.str()<<endl;
     return 0;
 }
