@@ -2,28 +2,48 @@
 #include<string>
 #include<fstream>
 #include<sstream>
+#include<vector>
 
 using namespace std;
 
-int main(){
-    auto text = "hello";
-    string output;
-    output+="<p>";
-    output+=text;
-    output+="<p>";
+class HTMLElement{
+    public:
+    string name, text;
+    vector<HTMLElement> elements;
+    const size_t indent_size = 2;
+    HTMLElement() {}
 
-    cout<<output<<"\n";
+    HTMLElement(const string& name, const string& text) : name(name), text(text) {}
 
+    string str(int indent = 0){
+        ostringstream oss;
+        string i(indent_size*indent, ' ');
+        oss<< i << name << ">" << endl;
+        if(text.size() > 0){
+            oss<< string(indent_size*(indent+1),' ') <<text<<endl;
+        }
 
-    string words[] = {"hello","world"};
-    ostringstream oss;
+        for(auto& e : elements){
+            oss << e.str(indent+1);
+        }
 
-    oss<< "<ul>";
-    for(auto word : words){
-        oss<<" <li> " << words << "</li>";
+        oss << i << "/" << name << ">" << endl;
+        return oss.str();
+
     }
-    oss<<"/ul>";
-    cout<<oss.str() << endl;
+
+};
+class HTMLBuilder{
+    HTMLElement root;
+    HTMLBuilder(string root_name){
+        root.name = root_name;
+    }
+    void addChild(string child_name, string child){
+        
+    }
+};
+int main(){
+
 
     return 0;
 }
