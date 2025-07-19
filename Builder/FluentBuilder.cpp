@@ -7,14 +7,14 @@
 using namespace std;
 
 class HTMLElement{
-    public:
+    friend class HTMLBuilder;
     string name, text;
     vector<HTMLElement> elements;
     const size_t indent_size = 2;
     HTMLElement() {}
 
     HTMLElement(const string& name, const string& text) : name(name), text(text) {}
-
+    public:
     string str(int indent = 0){
         ostringstream oss;
         string i(indent_size*indent, ' ');
@@ -52,7 +52,10 @@ int main(){
 
     HTMLBuilder builder("ul");
     builder.addChild("li", "hello").addChild("li","World").addChild("li","Namaste Sabko");
-    
+
     cout<<builder.str()<<endl;
+
+    
+    
     return 0;
 }
