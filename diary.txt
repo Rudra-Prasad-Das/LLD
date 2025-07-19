@@ -1,2 +1,0 @@
-Entry no0:Today is Sunday
-Entry no1:Today is Monday
